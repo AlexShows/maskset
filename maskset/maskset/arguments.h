@@ -29,6 +29,7 @@ public:
 	~arguments();
 	void get_argument_by_parameter(std::string param, std::string& argument);
 	void get_argument_by_index(unsigned int index, std::string& argument);
+	void list_arguments();
 private:
 	std::vector<std::pair<std::string, std::string>> opts;
 

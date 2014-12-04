@@ -28,7 +28,7 @@ arguments::arguments(int argc, char** argv)
 		}
 		else
 		{
-			opts.push_back(std::make_pair(std::string(argv[i]), std::string()));
+			opts.push_back(std::make_pair(std::string(), std::string(argv[i])));
 		}
 	}
 }
@@ -36,6 +36,15 @@ arguments::arguments(int argc, char** argv)
 arguments::~arguments()
 {
 
+}
+
+void arguments::list_arguments()
+{
+	std::cout << "Options found: " << std::endl;
+	for (auto & it : opts)
+	{
+		std::cout << it.first << " : " << it.second << std::endl;
+	}
 }
 
 // Returns the argument corresponding to the parameter provided

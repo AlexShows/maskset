@@ -11,6 +11,7 @@ to run only on the logical processors enabled by the bit mask.
 #include <iostream>
 #include <vector>
 #include <string>
+#include "arguments.h"
 
 int main(int argc, char** argv)
 {
@@ -23,13 +24,10 @@ int main(int argc, char** argv)
 	-n PROCESS_NAME	String specifying a process name to be masked (all processes matching will be masked)
 	-V --version	Display version information
 	*************/
+	arguments* foo = new arguments(argc, argv);
 
-	std::cout << "Options found: " << std::endl;
-	for (auto & it : opts)
-	{
-		std::cout << it.first << " : " << it.second << std::endl;
-	}
-
+	foo->list_arguments();
+	
 	std::cout << "Ironically press Enter to Exit...";
 	std::cin.get();
 
