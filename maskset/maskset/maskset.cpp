@@ -14,8 +14,6 @@ to run only on the logical processors enabled by the bit mask.
 
 int main(int argc, char** argv)
 {
-	std::vector<std::pair<std::string, std::string>> opts;
-
 	/************
 	Options:
 	-g GROUP		Processor Group, to which thread(s) will be masked
@@ -25,28 +23,6 @@ int main(int argc, char** argv)
 	-n PROCESS_NAME	String specifying a process name to be masked (all processes matching will be masked)
 	-V --version	Display version information
 	*************/
-	
-	for (int i = 0; i < argc; i++)
-	{
-		// Check to see if we have a dash "-" as the first character, 
-		// in which case this is a pair
-		if (argv[i][0] == '-')
-		{
-			if (i + 1 < argc)
-			{
-				opts.push_back(std::make_pair(std::string(argv[i]), std::string(argv[i + 1])));
-				i++;
-			}
-			else
-			{
-				std::cout << "Missing the argument for the parameter " << argv[i] << std::endl;
-			}
-		}
-		else
-		{
-			opts.push_back(std::make_pair(std::string(argv[i]), std::string()));
-		}
-	}
 
 	std::cout << "Options found: " << std::endl;
 	for (auto & it : opts)
