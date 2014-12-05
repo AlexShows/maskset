@@ -62,7 +62,19 @@ void arguments::get_argument_by_parameter(std::string param, std::string& argume
 // does not have its own index. Rather, it shares the same index with foo,
 // and foo is returned if index.
 // Throws an exception if the index is out of range
-void get_argument_by_index(unsigned int index, std::string& argument)
+void arguments::get_argument_by_index(unsigned int index, std::string& argument)
 {
-	// TODO
+	if (index >= opts.size())
+		throw(new std::exception("Index out of range."));
+
+	unsigned int cnt = 0;
+	for (auto &it : opts)
+	{
+		if (cnt == index)
+		{
+			argument = it.second;
+			break;
+		}
+		cnt++;
+	}
 }

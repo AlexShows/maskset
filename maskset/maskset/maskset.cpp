@@ -28,6 +28,12 @@ int main(int argc, char** argv)
 
 	foo->list_arguments();
 	
+	std::string bar;
+	int index = 2;
+	foo->get_argument_by_index(index, bar);
+
+	std::cout << "Argument by index " << index << " returned " << bar << std::endl;
+
 	std::cout << "Ironically press Enter to Exit...";
 	std::cin.get();
 
