@@ -27,8 +27,9 @@ class arguments
 public:
 	arguments(int argc, char** argv);
 	~arguments();
-	void get_argument_by_parameter(std::string param, std::string& argument);
-	void get_argument_by_index(unsigned int index, std::string& argument);
+	bool get_argument_by_parameter(std::string param, std::string& argument);
+	bool get_argument_by_parameter(std::string param);
+	bool get_argument_by_index(unsigned int index, std::string& argument);
 	void list_arguments();
 private:
 	std::vector<std::pair<std::string, std::string>> opts;

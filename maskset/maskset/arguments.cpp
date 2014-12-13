@@ -50,10 +50,42 @@ void arguments::list_arguments()
 // Returns the argument corresponding to the parameter provided
 // For example, if arguments "-p foo" are provided, the param is "p"
 // or "-p" or "--p" and the argument is "foo"
-// Throws an exception if no such parameter is found
-void arguments::get_argument_by_parameter(std::string param, std::string& argument)
+// Returns true if the parameter is found, false otherwise
+bool arguments::get_argument_by_parameter(std::string param, std::string& argument)
 {
-	// TODO
+	std::string param_alt1 = "-" + param;
+	std::string param_alt2 = "--" + param;
+
+	for (auto & it : opts)
+	{
+		if (it.first == param ||
+			it.first == param_alt1 ||
+			it.first == param_alt2)
+		{
+			argument = it.second;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+// Checks whether an argument was passed or not
+// Returns true if the parameter is found, false otherwise
+bool arguments::get_argument_by_parameter(std::string param)
+{
+	std::string param_alt1 = "-" + param;
+	std::string param_alt2 = "--" + param;
+
+	for (auto & it : opts)
+	{
+		if (it.first == param ||
+			it.first == param_alt1 ||
+			it.first == param_alt2)
+			return true;
+	}
+
+	return false;
 }
 
 // Returns the argument corresponding to the index provided
@@ -61,11 +93,11 @@ void arguments::get_argument_by_parameter(std::string param, std::string& argume
 // That means if the arguments are "-p foo" then the -p is not returned and 
 // does not have its own index. Rather, it shares the same index with foo,
 // and foo is returned if index.
-// Throws an exception if the index is out of range
-void arguments::get_argument_by_index(unsigned int index, std::string& argument)
+// Returns true if the parameter is found, false otherwise
+bool arguments::get_argument_by_index(unsigned int index, std::string& argument)
 {
 	if (index >= opts.size())
-		throw(new std::exception("Index out of range."));
+		return false;
 
 	unsigned int cnt = 0;
 	for (auto &it : opts)
@@ -73,8 +105,10 @@ void arguments::get_argument_by_index(unsigned int index, std::string& argument)
 		if (cnt == index)
 		{
 			argument = it.second;
-			break;
+			return true;
 		}
 		cnt++;
 	}
+
+	return false;
 }

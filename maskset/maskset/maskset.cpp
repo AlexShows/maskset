@@ -13,6 +13,27 @@ to run only on the logical processors enabled by the bit mask.
 #include <string>
 #include "arguments.h"
 
+#define MASKSET_VERSION "0.0.4"
+
+void display_version_info()
+{
+	// TODO
+}
+
+void args_test(arguments* args)
+{
+	args->list_arguments();
+
+	std::string result;
+	int index = 2;
+	bool success = args->get_argument_by_index(index, result);
+
+	if (success)
+		std::cout << "Argument by index " << index << " returned " << result << std::endl;
+	else
+		std::cout << "Failed to get argument by index " << index << std::endl;
+}
+
 int main(int argc, char** argv)
 {
 	/************
@@ -24,15 +45,11 @@ int main(int argc, char** argv)
 	-n PROCESS_NAME	String specifying a process name to be masked (all processes matching will be masked)
 	-V --version	Display version information
 	*************/
-	arguments* foo = new arguments(argc, argv);
+	arguments* args = new arguments(argc, argv);
+//	args_test(args);
 
-	foo->list_arguments();
-	
-	std::string bar;
-	int index = 2;
-	foo->get_argument_by_index(index, bar);
-
-	std::cout << "Argument by index " << index << " returned " << bar << std::endl;
+	if (args->get_argument_by_parameter("V"))
+		display_version_info();
 
 	std::cout << "Ironically press Enter to Exit...";
 	std::cin.get();
