@@ -17,19 +17,27 @@ to run only on the logical processors enabled by the bit mask.
 
 void display_version_info()
 {
-	// TODO
+	std::cout << "maskset version: " << MASKSET_VERSION << std::endl;
+	std::cout << "Build date: " << __DATE__ << std::endl;
+	std::cout << "Sets processor group and affinity mask for threads" << std::endl;
+	std::cout << std::endl;
 }
 
 void args_test(arguments* args)
 {
 	args->list_arguments();
 
-	std::string result;
+	std::vector<std::string> result;
 	int index = 2;
-	bool success = args->get_argument_by_index(index, result);
+	bool success = args->get_arguments_by_index(index, result);
 
 	if (success)
-		std::cout << "Argument by index " << index << " returned " << result << std::endl;
+	{
+		std::cout << "Argument(s) by index " << index << " returned ";
+		for (auto & it : result)
+			std::cout << it << " ";
+		std::cout << std::endl;
+	}
 	else
 		std::cout << "Failed to get argument by index " << index << std::endl;
 }
@@ -46,9 +54,9 @@ int main(int argc, char** argv)
 	-V --version	Display version information
 	*************/
 	arguments* args = new arguments(argc, argv);
-//	args_test(args);
+	args_test(args);
 
-	if (args->get_argument_by_parameter("V"))
+	if (args->was_parameter_given("V"))
 		display_version_info();
 
 	std::cout << "Ironically press Enter to Exit...";

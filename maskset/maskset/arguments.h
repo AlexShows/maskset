@@ -7,11 +7,8 @@ Released under the MIT License
 The arguments class accepts the number of arguments, 
 and a pointer to the character arrays of the arguments.
 
-It takes these and parses them, grouping them into 
-pairs if a dash or dashes are found.
-
-The character arrays are copied into a vector of
-pairs of strings, so once initialized, those variables
+The character arrays are copied into a vector of a 
+vector of strings, so once initialized, those variables
 can go out of scope.
 ***********/
 
@@ -27,11 +24,11 @@ class arguments
 public:
 	arguments(int argc, char** argv);
 	~arguments();
-	bool get_argument_by_parameter(std::string param, std::string& argument);
-	bool get_argument_by_parameter(std::string param);
-	bool get_argument_by_index(unsigned int index, std::string& argument);
+	bool get_arguments_by_parameter(std::string param, std::vector<std::string>& arguments);
+	bool was_parameter_given(std::string param);
+	bool get_arguments_by_index(unsigned int index, std::vector<std::string>& arguments);
 	void list_arguments();
 private:
-	std::vector<std::pair<std::string, std::string>> opts;
+	std::vector<std::vector<std::string>> opts;
 
 };

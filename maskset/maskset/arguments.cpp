@@ -10,25 +10,38 @@ Released under the MIT License
 
 arguments::arguments(int argc, char** argv)
 {
-	for (int i = 0; i < argc; i++)
+	// the first argument is always the exe name/location
+	std::vector<std::string> f;
+	opts.push_back(f);
+	opts.back().push_back(std::string(argv[0]));
+	
+	// If there is a second argument, it needs to be in a new vector
+	if (argc > 1)
 	{
-		// Check to see if we have a dash "-" as the first character, 
-		// in which case this is a pair
+		std::vector<std::string> second;
+		opts.push_back(second);
+	}
+
+	// Now start with the second argument and add them
+	for (int i = 1; i < argc; i++)
+	{
+		// If there's a dash, we're starting a new parameter's
+		// vector of arguments
 		if (argv[i][0] == '-')
 		{
-			if (i + 1 < argc)
-			{
-				opts.push_back(std::make_pair(std::string(argv[i]), std::string(argv[i + 1])));
-				i++;
-			}
-			else
-			{
-				std::cerr << "Missing the argument for the parameter " << argv[i] << std::endl;
-			}
+			std::string s(argv[i]);
+			std::vector<std::string> v;
+			v.push_back(s);
+			opts.push_back(v);
 		}
-		else
+		else // Otherwise, no dash, so this argument is part of the last parameter
 		{
-			opts.push_back(std::make_pair(std::string(), std::string(argv[i])));
+			if (opts.size() == 0)
+			{
+				std::vector<std::string> f;
+				opts.push_back(f);
+			}
+			opts.back().push_back(std::string(argv[i]));
 		}
 	}
 }
@@ -43,26 +56,32 @@ void arguments::list_arguments()
 	std::cout << "Options found: " << std::endl;
 	for (auto & it : opts)
 	{
-		std::cout << it.first << " : " << it.second << std::endl;
+		for (auto & p : it)
+		{
+			std::cout << p << " ";
+		}
+		std::cout << std::endl;
 	}
+	std::cout << std::endl;
 }
 
 // Returns the argument corresponding to the parameter provided
 // For example, if arguments "-p foo" are provided, the param is "p"
 // or "-p" or "--p" and the argument is "foo"
 // Returns true if the parameter is found, false otherwise
-bool arguments::get_argument_by_parameter(std::string param, std::string& argument)
+bool arguments::get_arguments_by_parameter(std::string param, std::vector<std::string>& arguments)
 {
 	std::string param_alt1 = "-" + param;
 	std::string param_alt2 = "--" + param;
 
 	for (auto & it : opts)
 	{
-		if (it.first == param ||
-			it.first == param_alt1 ||
-			it.first == param_alt2)
+		if (it.front() == param ||
+			it.front() == param_alt1 ||
+			it.front() == param_alt2)
 		{
-			argument = it.second;
+			arguments = it;
+			arguments.erase(it.begin());
 			return true;
 		}
 	}
@@ -70,18 +89,18 @@ bool arguments::get_argument_by_parameter(std::string param, std::string& argume
 	return false;
 }
 
-// Checks whether an argument was passed or not
+// Checks whether a parameter was passed or not
 // Returns true if the parameter is found, false otherwise
-bool arguments::get_argument_by_parameter(std::string param)
+bool arguments::was_parameter_given(std::string param)
 {
 	std::string param_alt1 = "-" + param;
 	std::string param_alt2 = "--" + param;
 
 	for (auto & it : opts)
 	{
-		if (it.first == param ||
-			it.first == param_alt1 ||
-			it.first == param_alt2)
+		if (it.front() == param ||
+			it.front() == param_alt1 ||
+			it.front() == param_alt2)
 			return true;
 	}
 
@@ -94,7 +113,7 @@ bool arguments::get_argument_by_parameter(std::string param)
 // does not have its own index. Rather, it shares the same index with foo,
 // and foo is returned if index.
 // Returns true if the parameter is found, false otherwise
-bool arguments::get_argument_by_index(unsigned int index, std::string& argument)
+bool arguments::get_arguments_by_index(unsigned int index, std::vector<std::string>& arguments)
 {
 	if (index >= opts.size())
 		return false;
@@ -104,7 +123,7 @@ bool arguments::get_argument_by_index(unsigned int index, std::string& argument)
 	{
 		if (cnt == index)
 		{
-			argument = it.second;
+			arguments = it;
 			return true;
 		}
 		cnt++;
